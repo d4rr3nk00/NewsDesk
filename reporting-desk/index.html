@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>취재 데스크</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+  <script src="/ai-ui.js" defer></script>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">ㅊ</span><span><strong>취재 데스크</strong><small>REPORTING DESK</small></span></div>
+      <div class="nav-label">WORKSPACE</div>
+      <nav aria-label="주 메뉴">
+        <button class="nav-item active" data-action="home" type="button"><span class="nav-icon">▦</span>오늘 <span class="nav-count" id="nav-count">0</span></button>
+        <button class="nav-item" data-action="all-cases" type="button"><span class="nav-icon">▤</span>모든 취재</button>
+      </nav>
+      <div class="sidebar-bottom"><span class="secure-dot"></span><span><strong>이 컴퓨터에 저장 중</strong><small>AI 요청 시 선택한 자료만 전송</small></span></div>
+    </aside>
+    <div class="page">
+      <header class="topbar">
+        <div class="breadcrumbs"><span>WORKSPACE</span><span class="crumb-sep">/</span><strong id="breadcrumb">오늘</strong></div>
+        <div class="top-actions"><span class="today-label" id="today-label"></span><button class="button" data-action="refresh" type="button">새로고침</button><button class="button ai-top-button" data-action="ai-settings" type="button">✦ AI 연결</button><button class="button button-primary" data-action="new-case" type="button"><span class="plus">＋</span> 새 취재</button></div>
+      </header>
+      <main id="app" tabindex="-1"><div class="loading">작업 공간을 열고 있습니다.</div></main>
+    </div>
+  </div>
+  <dialog id="modal" aria-labelledby="modal-title"><div id="modal-content"></div></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

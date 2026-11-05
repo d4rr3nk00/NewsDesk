@@ -1,0 +1,46 @@
+name: Deliver Alpha installers
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build-and-deliver:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install NSIS
+        run: choco install nsis --version=3.11 -y --no-progress
+      - name: Fetch verified official runtimes
+        env:
+          DESK_DOWNLOADS: build/downloads
+        run: python scripts/fetch-windows.py
+      - name: Build self-contained Windows installer
+        env:
+          DESK_DOWNLOADS: build/downloads
+          MAKENSIS: C:\Program Files (x86)\NSIS\makensis.exe
+        run: python scripts/build-windows.py
+      - name: Prepare APK and checksums
+        shell: python
+        run: |
+          import hashlib, pathlib, shutil
+          out = pathlib.Path('releases')
+          shutil.copy2('release-inputs/NewsDesk-0.2.0-alpha.apk', out)
+          shutil.copy2('release-inputs/START-HERE.txt', out)
+          sums = []
+          for name in ['NewsDesk-0.2.0-alpha-Setup.exe','NewsDesk-0.2.0-alpha.apk']:
+              with (out/name).open('rb') as f:
+                  sums.append(hashlib.file_digest(f, 'sha256').hexdigest() + '  ' + name)
+          (out/'SHA256SUMS.txt').write_text('\n'.join(sums)+'\n', encoding='utf-8')
+      - name: Upload installers and publish prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: pwsh
+        run: |
+          gh release upload v0.2.0-alpha.1 --repo "${{ github.repository }}" --clobber releases/NewsDesk-0.2.0-alpha-Setup.exe releases/NewsDesk-0.2.0-alpha.apk releases/SHA256SUMS.txt releases/START-HERE.txt
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          gh release edit v0.2.0-alpha.1 --repo "${{ github.repository }}" --draft=false --prerelease
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

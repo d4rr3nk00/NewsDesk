@@ -1,0 +1,12 @@
+{
+  "electron": {
+    "version": "45.2.3",
+    "filename": "electron-v45.2.3-win32-x64.zip",
+    "sha256": "489cd061908e697394b004298bf5ffd345c935d10e8ca197ba819f019ab2dec0"
+  },
+  "python": {
+    "version": "3.14.8",
+    "filename": "python-3.14.8-embed-amd64.zip",
+    "sha256": "a93abe456ab01bd96d7a085b3cdb6566b3063f4241360d114142fbdb07f0a310"
+  }
+}
